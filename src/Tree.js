@@ -1,33 +1,14 @@
-import React, { Component } from 'react';
-import * as d3 from 'd3'
-import tips from "./tip.csv";
-import Child1 from "./Child1";
-import Child2 from "./Child2";
-import './App.css'
+import React, { Component } from "react";
+import * as d3 from "d3";
+import "./App.css"
 
-
-class App extends Component {
-  constructor(props){
+class Tree extends Component {
+  constructor(props) {
     super(props);
-    this.state={data:[]};
+ 
   }
 
-  componentDidMount(){
-    var self = this
-    d3.csv(tips, function(d){
-      return {
-        tip:parseFloat(d.tip),
-        total_bill:parseFloat(d.total_bill),
-        day:d.day
-      }
-    }).then(function(csv_data){
-      self.setState({data:csv_data})
-      //console.log(csv_data)
-    })
-    .catch(function(err){
-      console.log(err)
-    })
-
+  componentDidMount() {
     var data = {
       "name": "Root",
       "children": [
@@ -79,18 +60,18 @@ class App extends Component {
     //console.log(root) // Adds tree related information
     treeLayout(root); // Adds layout positions
     //console.log(root) // Adds tree related information
-    d3.select(".tree").selectAll(".link").data(root.links()).join("line").attr('class','link')
+    d3.select(".parent").selectAll(".link").data(root.links()).join("line").attr('class','link')
     .attr('x1', d=>d.source.x).attr('y1', d=>d.source.y)
     .attr('x2', d=>d.target.x).attr('y2', d=>d.target.y)
 
 
-    d3.select('.tree')
+    d3.select('.parent')
     .selectAll('.label')
     .data(root.descendants())
     .join('text')
     .attr('class', 'label')
     .attr('x', d => d.x)
-    .attr('y', d => d.y - 5)
+    .attr('y', d => d.y - 15)
     .text(d => d.data.name);
 
     var tooltip = d3.select("body")
@@ -101,7 +82,7 @@ class App extends Component {
       .style("position", "absolute")  // uses absolute positioning
       .style("visibility", "hidden");  // starts as hidden
 
-    d3.select('.tree')
+    d3.select('.parent')
     .selectAll('.node')
     .data(root.descendants())
     .join('circle')
@@ -113,25 +94,22 @@ class App extends Component {
       tooltip.html("Hello").style("visibility", "visible");  // starts as hidden
 
     })
-    .on("mousemove", (event,d)=>{
-      tooltip.html("Hello").style("visibility", "visible");  // starts as hidden
-
+    .on("mousemove", (event)=>{
+      
     })
-    .on("mouseout", (event,d)=>{
-      tooltip.html("Hello").style("visibility", "visible");  // starts as hidden
+    .on("mouseout", (event)=>{
 
     })
   }
+  
+
   render() {
-    return <div className = "parent">
-      
-      <div className="child1"><Child1 data1={this.state.data}></Child1></div>
-      <div className="child2"><Child2 data2={this.state.data}></Child2></div>
+    return (
       <svg width="700" height="350">
-        <g className="tree" transform="translate(0,50)"></g>
+        <g className="parent" transform="translate(0,50)"></g>
       </svg>
-    </div>
+    );
   }
 }
 
-export default App;
+export default Tree;
