@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3'
-import tip from "./tip.csv";
+import dataset from "./SampleDataset.csv";
 import Child1 from "./Child1";
 import Child2 from "./Child2";
 import './App.css'
@@ -14,11 +14,11 @@ class App extends Component {
 
   componentDidMount(){
     var self = this
-    d3.csv(tip, function(d){
+    d3.csv(dataset, function(d){
       return {
-        total_bill:parseFloat(d.total_bill),
-        tip:parseFloat(d.tip),
-        day: d.day
+        x:parseFloat(d.x),
+        y:parseFloat(d.y),
+        category: d.category
       }
     }).then(function(csv_data){
       self.setState({data:csv_data})
